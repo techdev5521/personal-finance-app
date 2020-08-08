@@ -43,6 +43,11 @@ Go to the API directory
 cd api/
 ```
 
+Create Python virtual environment
+```bash
+python3 -m venv venv
+```
+
 Activate the Python virtual environment
 ```bash
 source venv/bin/activate
