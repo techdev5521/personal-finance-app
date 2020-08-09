@@ -1,13 +1,8 @@
-import os
-import sys
 import enum
-from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../personal_finance-dev.db'
 # https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/#a-minimal-application
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 
 class User(db.Model):
     __tablename__= 'user'
@@ -80,7 +75,3 @@ class Transactions(db.Model):
     amount = db.Column(db.DECIMAL(14,2), nullable=False)
     check_number = db.Column(db.Integer, nullable=True)
     note = db.Column(db.String(255), nullable=True)
-
-# TODO: Create setup script? of some sort and move database creation there
-db.create_all()
-print("CREATED DB")
