@@ -83,3 +83,4 @@ class Transactions(db.Model):
 
 # TODO: Create setup script? of some sort and move database creation there
 db.create_all()
+print("CREATED DB")
