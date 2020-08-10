@@ -12,17 +12,17 @@
 
 
 ### Step 1: Create and enter a project directory
-```bash
+```
 mkdir project-dir && cd project-dir
 ```
 
 ### Step 2: Close the Reposistory
-```bash
+```
 git clone https://github.com/techdev5521/personal-finance-app.git
 ```
 
 ### Step 3: Install npm Packages
-```bash
+```
 npm install
 ```
 
@@ -35,26 +35,24 @@ There are three built in npm scripts that come from create-react-app:
 
 1. `npm run test`: This will run any tests (using the [Jest](https://jestjs.io/) tester). There are currently no defined tests.
 
-1. `npm run eject`: <span style="background-color: #fff394">**THIS IS NON-REVERSABLE**</span>: This will abstract all of the build environment settings and make them available to you. See the [create-reacte-app docs on ejecting](https://create-react-app.dev/docs/available-scripts#npm-run-eject) for more information.
-
 ### Step 4: Setup Python for API
 Go to the API directory
-```bash
+```
 cd api/
 ```
 
 Create Python virtual environment
-```bash
+```
 python3 -m venv venv
 ```
 
 Activate the Python virtual environment
-```bash
+```
 source venv/bin/activate
 ```
 
 Install Python requiements
-```bash
+```
 pip install -r requirements.txt
 ```
 
