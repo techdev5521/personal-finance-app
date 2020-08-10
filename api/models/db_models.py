@@ -62,7 +62,7 @@ class TransactionType(enum.Enum):
     WITHDRAWAL = 2
     TRANSFER = 3
     
-class Transactions(db.Model):
+class Transaction(db.Model):
     __tablename__ = 'transaction'
     id = db.Column(db.Integer, primary_key=True)
     fk_withdrawal_account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=True)
