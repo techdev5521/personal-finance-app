@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_marshmallow import Marshmallow
 
 # Initialize the whole api
 def create_app():
@@ -14,5 +13,4 @@ def create_app():
     # Submodule Initialization
     models.init_app(app)
     routes.init_app(app)
-
     return app
