@@ -19,9 +19,9 @@ class UserRoute(Resource):
 				salt = request.json['salt']
 			)
 
-			query_user_count = db.session.query(User).filter_by(email=User.email).count
+			query_user_count = db.session.query(User).filter_by(email=new_user.email).first()
 
-			if query_user_count == 0:
+			if query_user_count == None:
 				db.session.add(new_user)
 				db.session.commit()
 
