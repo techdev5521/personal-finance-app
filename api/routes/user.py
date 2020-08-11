@@ -60,8 +60,11 @@ class UserRoute(Resource):
 
             query_user = db.session.query(
                 User).filter_by(uuid=search_uuid).first()
+            
+            if query_user == None:
+                return { 'message': 'invalid user' }, 400
 
-            user = UserSchema()
+            user = UserSchema(exclude=['password_hash', 'id'])
             return user.dump(query_user)
         else:
             return {'message': 'Missing uuid'}, 400
