@@ -19,14 +19,20 @@ class UserRoute(Resource):
 				salt = request.json['salt']
 			)
 
-			db.session.add(new_user)
-			db.session.commit()
+			query_user_count = db.session.query(User).filter_by(email=User.email).count
 
-			print("New user registered")
+			if query_user_count == 0:
+				db.session.add(new_user)
+				db.session.commit()
 
-			user = UserSchema()
-			# Can use json encoded value with dumps()
-			return user.dump(new_user)
+				print("New user registered")
+
+				user = UserSchema()
+				# Can use json encoded value with dumps()
+				return user.dump(new_user)
+			else:
+				return { 'message': 'Email already signed up' }, 400
+			
 		else:
 			return { 'message': 'Missing user entry' }, 400
 

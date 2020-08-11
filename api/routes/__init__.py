@@ -1,7 +1,6 @@
 from .example import Example
 from .user import UserRoute
 from flask_restful import Api
-from api import app
 
 def init_app(app):
     """Initializes flask-restful routes and endpoints
