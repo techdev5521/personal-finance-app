@@ -11,11 +11,15 @@ class UserRoute(Resource):
 		Returns:
 			str: User Json
 		"""
-		if request.json['first_name'] and request.json['last_name'] and request.json['email'] and request.json['salt']:
+		if request.json['first_name'] and request.json['last_name'] and request.json['email'] and request.json['password_hash'] and request.json['salt']:
+			if len(request.json['password_hash']) != 32:
+				return { 'message': 'Incorect password hash format' }, 400
+
 			new_user = User(
 				first_name = request.json['first_name'],
 				last_name = request.json['last_name'],
 				email = request.json['email'],
+				password_hash = request.json['password_hash'],
 				salt = request.json['salt']
 			)
 

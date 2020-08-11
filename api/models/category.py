@@ -1,3 +1,4 @@
+import uuid as uuid_lib
 from .models import db, ma
 from .guid import GUID
 
@@ -9,7 +10,7 @@ class Category(db.Model):
     """
     __tablename__ = 'category'
     id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(GUID, nullable=False)
+    uuid = db.Column(GUID, nullable=False, default=str(uuid_lib.uuid4()))
     name = db.Column(db.String(255), nullable=False)
 
 class CategorySchema(ma.SQLAlchemyAutoSchema):

@@ -1,4 +1,5 @@
 import enum
+import uuid as uuid_lib
 from .models import db, ma
 from .guid import GUID
 from .user import User
@@ -18,7 +19,7 @@ class Account(db.Model):
     __tablename__ = 'account'
     id = db.Column(db.Integer, primary_key=True)
     fk_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    uuid = db.Column(GUID, nullable=False)
+    uuid = db.Column(GUID, nullable=False, default=str(uuid_lib.uuid4()))
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255), nullable=True)
     type = db.Column(db.Enum(AccountType), nullable=False)

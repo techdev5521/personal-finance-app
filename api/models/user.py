@@ -15,6 +15,7 @@ class User(db.Model):
     last_name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     salt = db.Column(db.String(255), nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
 
 class UserSchema(ma.SQLAlchemyAutoSchema):
     """User Schema for Marshmallow
