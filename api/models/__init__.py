@@ -6,8 +6,12 @@ from .category import *
 from .payee import *
 from .transaction import *
 
-# Initialize sqlalchemy db backend
 def init_app(app):
+    """Initializes SQLAlchemy and Marshmallow
+
+    Args:
+        app (Flask): The flask app context
+    """
     db.init_app(app)
     ma.init_app(app)
     # TODO: Create setup script? of some sort and move database creation there

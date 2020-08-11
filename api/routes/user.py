@@ -72,6 +72,11 @@ class UserRoute(Resource):
 
 	# Delete
 	def delete(self) -> str:
+		"""Updates a user object given updated information
+
+		Returns:
+			str: HTTP-200 if successful, HTTP-400 on error
+		"""
 		if request.args['uuid']:
 			search_uuid = request.args['uuid']
 			query_user = db.session.query(User).filter_by(uuid=search_uuid).first()
