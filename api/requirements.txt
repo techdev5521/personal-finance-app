@@ -1,6 +1,9 @@
 aniso8601==8.0.0
 astroid==2.4.2
+autopep8==1.5.4
+cffi==1.14.1
 click==7.1.2
+cryptography==3.0
 Flask==1.1.2
 flask-marshmallow==0.13.0
 Flask-RESTful==0.3.8
@@ -14,6 +17,9 @@ MarkupSafe==1.1.1
 marshmallow==3.7.1
 marshmallow-sqlalchemy==0.23.1
 mccabe==0.6.1
+pycodestyle==2.6.0
+pycparser==2.20
+PyJWT==1.7.1
 pylint==2.5.3
 pytz==2020.1
 six==1.15.0
