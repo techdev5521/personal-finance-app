@@ -10,6 +10,11 @@ class AccountType(enum.Enum):
     CARD = 3
 
 class Account(db.Model):
+    """Account Model for SQLAlchemy
+
+    Args:
+        db (Model): Returns an SQLAlchemy Account object
+    """
     __tablename__ = 'account'
     id = db.Column(db.Integer, primary_key=True)
     fk_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -26,6 +31,11 @@ class Account(db.Model):
     user = db.relationship('User', backref=db.backref('accounts'))
 
 class AccountSchema(ma.SQLAlchemyAutoSchema):
+    """Account Schema for Marshmallow
+
+    Args:
+        ma (SQLAlchemyAutoSchema): Returns a Marshmallow Account Schema object for serialization/deserialization
+    """
     class Meta:
         model = Account
         include_fk = True
