@@ -1,5 +1,6 @@
 from flask import Flask
 from . import models, routes
+from api.tokens import ta
 
 # App instance creation
 app = Flask(__name__)
