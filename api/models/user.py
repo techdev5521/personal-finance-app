@@ -14,7 +14,6 @@ class User(db.Model):
     first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False)
-    salt = db.Column(db.String(255), nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
 
 class UserSchema(ma.SQLAlchemyAutoSchema):

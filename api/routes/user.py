@@ -1,9 +1,8 @@
 from uuid import UUID
-from flask_restful import Resource, request
 from api.models import db
 from api.models.user import User, UserSchema
-from api.tokens import ta
-
+from api.security import ta, ph
+from flask_restful import Resource, request
 
 class UserRoute(Resource):
     # Create
@@ -13,18 +12,16 @@ class UserRoute(Resource):
         Returns:
             str: User Json
         """
-        if request.json['first_name'] and request.json['last_name'] and request.json['email'] and request.json['password_hash'] and request.json['salt']:
-            # Check that the password hash is in the correct format
-            if len(request.json['password_hash']) != 32:
-                return {'message': 'Incorect password hash format'}, 400
-
+        if request.json['first_name'] and request.json['last_name'] and request.json['email'] and request.json['password']:
+            # Create password hash
+            password_hash = ph.hash(request.json['password'])
+            
             # Create a user to add
             new_user = User(
                 first_name=request.json['first_name'],
                 last_name=request.json['last_name'],
                 email=request.json['email'],
-                password_hash=request.json['password_hash'],
-                salt=request.json['salt']
+                password_hash=password_hash
             )
 
             # Check if the user already exists by email
@@ -38,7 +35,9 @@ class UserRoute(Resource):
 
                 print("New user registered")
 
-                user = UserSchema()
+                # Exclude password_hash and id from being returned to user
+                user = UserSchema(exclude=['password_hash', 'id'])
+                
                 # Can use json encoded value with dumps()
                 return user.dump(new_user)
             else:
