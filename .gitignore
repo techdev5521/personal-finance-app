@@ -18,6 +18,7 @@
 .env.test.local
 .env.production.local
 .vscode/
+.history/
 
 # Node Package Management
 npm-debug.log*
