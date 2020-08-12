@@ -23,7 +23,7 @@ class Transaction(db.Model):
     fk_deposit_account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=True)
     fk_payee_id = db.Column(db.Integer, db.ForeignKey('payee.id'), nullable=True)
     fk_category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
-    uuid = db.Column(GUID, nullable=False, default=str(uuid_lib.uuid4()))
+    uuid = db.Column(GUID, nullable=False, default=str(uuid_lib.uuid4()), unique=True, index=True)
     date = db.Column(db.Date, nullable=False)
     type = db.Column(db.Enum(TransactionType), nullable=False)
     amount = db.Column(db.DECIMAL(14,2), nullable=False)

@@ -10,7 +10,7 @@ class Category(db.Model):
     """
     __tablename__ = 'category'
     id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(GUID, nullable=False, default=str(uuid_lib.uuid4()))
+    uuid = db.Column(GUID, nullable=False, default=str(uuid_lib.uuid4()), unique=True, index=True)
     name = db.Column(db.String(255), nullable=False)
 
 class CategorySchema(ma.SQLAlchemyAutoSchema):

@@ -13,7 +13,7 @@ class LoginRoute(Resource):
         # TODO: Check for previous tokens and time, create a token expiry check
         # Then issue a new token if it's expired but valid? 
         # Create a new key no matter what after X days?
-        if request.json['email'] and request.json['password']:
+        if ('email' in request.json) and ('password' in request.json):
             email = request.json['email']
             password = request.json['password']
 
@@ -21,7 +21,7 @@ class LoginRoute(Resource):
                 User).filter_by(email=email).first()
             
             # Check that the user exists
-            if query_user == None:
+            if query_user is None:
                 return { 'message': 'login failed' }, 400
 
             # TODO: Move password verification to separate function?

@@ -53,7 +53,7 @@ class UserRoute(Resource):
         Returns:
                 str: User Json
         """
-        if request.args['uuid']:
+        if 'uuid' in request.args:
             print("Checking for uuid: ", request.args['uuid'])
 
             search_uuid = request.args['uuid']
@@ -77,7 +77,7 @@ class UserRoute(Resource):
                 str: HTTP-200 if successful, HTTP-400 on error
         """
         # Check for parameters
-        if request.json['token'] and request.json['uuid']:
+        if ('token'in request.json) and ('uuid' in request.json):
             search_uuid = UUID(request.json['uuid'])
             # Verify a valid token
             if not ta.verify_token(
@@ -93,15 +93,15 @@ class UserRoute(Resource):
             # Make sure the user exists
             if query_user:
                 # Update user information depending on what's provided
-                if request.json['first_name']:
+                if 'first_name' in request.json:
                     query_user.first_name = request.json['first_name']
-                if request.json['last_name']:
+                if 'last_name' in request.json:
                     query_user.last_name = request.json['last_name']
-                if request.json['email']:
+                if 'email' in request.json:
                     # Make sure the email is not already registered
                     query_check_user = db.session.query(
                         User).filter_by(email=request.json['email']).first()
-                    if query_check_user:
+                    if query_check_user is not None:
                         return {'message': 'email already registered'}, 400
                     query_user.email = request.json['email']
                 db.session.commit()
@@ -118,7 +118,7 @@ class UserRoute(Resource):
         Returns:
             str: HTTP-200 if successful, HTTP-400 on error
         """
-        if request.args['uuid']:
+        if 'uuid' in request.args:
             search_uuid = request.args['uuid']
             query_user = db.session.query(
                 User).filter_by(uuid=search_uuid).first()
