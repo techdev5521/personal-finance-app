@@ -10,5 +10,6 @@ def init_app(app):
         app (Flask): The flask app context
     """
     api = Api(app)
+    api.add_resource(Example, '/api/example')
     api.add_resource(UserRoute, '/api/user')
     api.add_resource(LoginRoute, '/api/login')
