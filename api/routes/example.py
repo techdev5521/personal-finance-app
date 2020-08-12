@@ -1,15 +1,21 @@
-from flask_restful import Resource
+from api.models import db
+from api.models.example import ExampleModel, ExampleSchema
+from flask_restful import Resource, request
 
 # An example route
-class Example(Resource):
-	def get(self, name: str) -> str:
-		"""Returns a greeting for the given name.
+class ExampleRoute(Resource):
+    """Flask Route for Example Model"""
 
-		Args:
-			name (str): The name to be greeted.
+    def get(self) -> ExampleModel:
+        """Returns the Example record requestion/
 
-		Returns:
-			str: A greeting for the given name.
-		"""
-
-		return "Hello, " + name + "!"
+        Returns:
+            ExampleModel: Example record requested.
+        """
+        example = ExampleSchema(
+            first_name="Justin",
+            last_name="Campbell",
+            email="campb303@purdue.edu",
+            password_hash="urMom"
+        )
+        
