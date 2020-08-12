@@ -12,7 +12,7 @@ class Payee(db.Model):
     __tablename__ = 'payee'
     id = db.Column(db.Integer, primary_key=True)
     fk_last_category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=True)
-    uuid = db.Column(GUID, nullable=False, default=str(uuid_lib.uuid4()))
+    uuid = db.Column(GUID, nullable=False, default=str(uuid_lib.uuid4()), unique=True, index=True)
     name = db.Column(db.String(255), nullable=False)
 
     category = db.relationship('Category', backref=db.backref('payees'))
