@@ -1,25 +1,10 @@
 """Routing for User"""
-from uuid import UUID
 from flask_restful import Resource, request
 from api.models import db
 from api.models.user import UserModel, UserSchema
 from api.security import ta, ph
+from api.security.util import uuid_is_valid
 
-def uuid_is_valid(uuid: str) -> bool:
-    """Returns true is given string is a valid UUID
-
-    Args:
-        uuid (str): String to test.
-
-    Returns:
-        bool: Is UUID valid.
-    """
-    try:
-        UUID(uuid)
-    except ValueError:
-        return False
-
-    return True
 
 class UserRoute(Resource):
     """Routing for User"""
@@ -66,7 +51,7 @@ class UserRoute(Resource):
         db.session.commit()
 
         # Return Created User w/o ID or Password info
-        user_schema = UserSchema(exclude=["id", "password_hash"])
+        user_schema = UserSchema()
         return user_schema.dump(new_user), 200
 
     def get(self, uuid: str) -> tuple:
@@ -88,7 +73,7 @@ class UserRoute(Resource):
             return {"message": "No user with uuid {uuid} found.".format(uuid=uuid)}, 404
 
         # Return User w/o ID or Password info
-        user = UserSchema(exclude=["id", "password_hash"])
+        user = UserSchema()
         return user.dump(existing_user), 200
 
     def put(self, uuid: str) -> tuple:
@@ -172,5 +157,5 @@ class UserRoute(Resource):
         db.session.commit()
 
         # Return Deleted User w/o ID or Password info
-        user_schema = UserSchema(exclude=["id", "password_hash"])
+        user_schema = UserSchema()
         return user_schema.dump(existing_user), 200

@@ -40,3 +40,4 @@ class AccountSchema(ma.SQLAlchemyAutoSchema):
         """Schema Options"""
         model = Account
         include_fk = True
+        exclude = ('id', 'fk_user_id')

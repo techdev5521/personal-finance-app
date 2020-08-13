@@ -20,3 +20,4 @@ class CategorySchema(ma.SQLAlchemyAutoSchema):
         """ Schema Options"""
         model = Category
         include_fk = True
+        exclude = ('id')

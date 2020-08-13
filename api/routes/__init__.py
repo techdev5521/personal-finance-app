@@ -13,6 +13,11 @@ def init_app(app):
     """
     api = Api(app)
     api.add_resource(ExampleRoute, '/api/example')
-    api.add_resource(UserRoute, '/api/user/create', '/api/user/<string:uuid>',
-                     '/api/user/update/<string:uuid>', '/api/user/delete/<string:uuid>')
+    api.add_resource(
+        UserRoute,
+        '/api/user/create',
+        '/api/user/<string:uuid>',
+        '/api/user/update/<string:uuid>',
+        '/api/user/delete/<string:uuid>'
+    )
     api.add_resource(LoginRoute, '/api/login')

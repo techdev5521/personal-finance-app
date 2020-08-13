@@ -23,3 +23,4 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
         """Schema Options"""
         model = UserModel
         include_fk = True
+        exclude = ('id', 'password_hash')

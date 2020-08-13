@@ -52,3 +52,10 @@ class TransactionSchema(ma.SQLAlchemyAutoSchema):
         """Schema Options"""
         model = Transaction
         include_fk = True
+        exclude = (
+            'id',
+            'fk_withdrawal_account_id',
+            'fk_deposit_account_id',
+            'fk_payee_id',
+            'fk_category_id'
+        )

@@ -24,3 +24,4 @@ class PayeeSchema(ma.SQLAlchemyAutoSchema):
         """Schema Options"""
         model = Payee
         include_fk = True
+        exclude = ('id')
