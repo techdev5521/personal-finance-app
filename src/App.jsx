@@ -1,16 +1,14 @@
 import React from 'react';
 import './App.css';
-import Navigation from './nav/Navigation';
-import PageContent from './PageContent';
-import Box from '@material-ui/core/Box';
+import NavManager from './NavManager';
+import { Box } from '@material-ui/core';
 
 function App() {
-  return (
-    <Box overflow='hidden'>
-      <Navigation />
-      <PageContent />
-    </Box>
-  );
+    return (
+        <Box>
+            <NavManager />
+        </Box>
+    );
 }
 
 export default App;

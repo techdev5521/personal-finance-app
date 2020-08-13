@@ -3,11 +3,11 @@ import Box from '@material-ui/core/Box';
 import TopBar from './TopBar';
 import SideBar from './SideBar';
 
-function Navigation() {
+function Navigation(props) {
     return (
         <Box>
-            <TopBar />
-            <SideBar />
+            <TopBar onDrawerToggle={props.onDrawerToggle} />
+            <SideBar drawerWidth={props.drawerWidth} />
         </Box>
     );
 }

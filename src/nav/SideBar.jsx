@@ -1,20 +1,23 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
-import './Sidebar.css';
 import { Toolbar } from '@material-ui/core';
 
-function SideBar() {
+function SideBar(props) {
+    const sidebarStyle = {
+        width: props.drawerWidth,
+    }
+
     return (
         <Box>
             <Drawer
                 variant='persistent'
                 anchor='left'
                 open={true}
-                classes={{
-                    paper: 'sidebar'
+                PaperProps={{
+                    style: sidebarStyle
                 }}
-                className='sidebar'
+                style={sidebarStyle}
             >
                 <Toolbar />
                 <Box>Test</Box>
