@@ -19,7 +19,6 @@ function SideBar() {
                 <Toolbar />
                 <Box>Test</Box>
             </Drawer>
-            <Box className='sidebar' height='100vh' display='inline-block' />
         </Box>
     );
 }
