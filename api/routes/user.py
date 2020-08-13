@@ -1,132 +1,176 @@
+"""Routing for User"""
 from uuid import UUID
-from api.models import db
-from api.models.user import User, UserSchema
-from api.security import ta, ph
 from flask_restful import Resource, request
+from api.models import db
+from api.models.user import UserModel, UserSchema
+from api.security import ta, ph
+
+def uuid_is_valid(uuid: str) -> bool:
+    """Returns true is given string is a valid UUID
+
+    Args:
+        uuid (str): String to test.
+
+    Returns:
+        bool: Is UUID valid.
+    """
+    try:
+        UUID(uuid)
+    except ValueError:
+        return False
+
+    return True
 
 class UserRoute(Resource):
-    # Create
-    def post(self) -> str:
-        """Returns a json object of the newly created User.
+    """Routing for User"""
+
+    def post(self) -> tuple:
+        """Creates a new user in the database.
+
+        Creates a user with provided information, auto generated uuid and hashed password.
 
         Returns:
-            str: User Json
+            tuple: (User Info | Error Message, HTTP Return Code)
         """
-        if request.json['first_name'] and request.json['last_name'] and request.json['email'] and request.json['password']:
-            # Create password hash
-            password_hash = ph.hash(request.json['password'])
-            
-            # Create a user to add
-            new_user = User(
-                first_name=request.json['first_name'],
-                last_name=request.json['last_name'],
-                email=request.json['email'],
-                password_hash=password_hash
-            )
+        # Check for JSON content
+        new_user_json = request.get_json(silent=True)
+        if new_user_json is None:
+            return {"message": "Could not parse JSON"}, 500
 
-            # Check if the user already exists by email
-            query_user_count = db.session.query(
-                User).filter_by(email=new_user.email).first()
+        # Check for missing keys
+        keys_to_look_for = ["first_name", "last_name", "email", "password"]
+        for key in keys_to_look_for:
+            if key not in new_user_json:
+                return {"message": "Missing key: {key}".format(key=key)}, 422
 
-            # User does not exist, continue
-            if query_user_count == None:
-                db.session.add(new_user)
-                db.session.commit()
+        # Check for existing user by email
+        existing_user = db.session.query(UserModel).filter_by(
+            email=new_user_json["email"]).first()
+        if existing_user is not None:
+            return {"message": "A user with email address {email} already exists.".format(
+                email=new_user_json["email"])}, 409
 
-                print("New user registered")
+        # Create argon2 Password Hash
+        password_hash = ph.hash(new_user_json["password"])
 
-                # Exclude password_hash and id from being returned to user
-                user = UserSchema(exclude=['password_hash', 'id'])
-                
-                # Can use json encoded value with dumps()
-                return user.dump(new_user)
+        # Create New User
+        new_user = UserModel(
+            first_name=new_user_json["first_name"],
+            last_name=new_user_json["last_name"],
+            email=new_user_json["email"],
+            password_hash=password_hash
+        )
+
+        # Add User to Database
+        db.session.add(new_user)
+        db.session.commit()
+
+        # Return Created User w/o ID or Password info
+        user_schema = UserSchema(exclude=["id", "password_hash"])
+        return user_schema.dump(new_user), 200
+
+    def get(self, uuid: str) -> tuple:
+        """Returns user info for given UUID.
+
+        Args:
+            uuid (str): UUID of user to lookup.
+
+        Returns:
+            tuple: (User Info | Error Message, HTTP Return Code)
+        """
+        # Confirm UUID is valid
+        if not uuid_is_valid(uuid):
+            return {"message": "{uuid} is not a valid UUID".format(uuid=uuid)}, 400
+
+        # Confirm user exists
+        existing_user = db.session.query(UserModel).filter_by(uuid=uuid).first()
+        if existing_user is None:
+            return {"message": "No user with uuid {uuid} found.".format(uuid=uuid)}, 404
+
+        # Return User w/o ID or Password info
+        user = UserSchema(exclude=["id", "password_hash"])
+        return user.dump(existing_user), 200
+
+    def put(self, uuid: str) -> tuple:
+        """Updates user information.
+
+        Args:
+            uuid (str): UUID of user to update.
+
+        Returns:
+            tuple: (User Info | Error Message, HTTP Return Code)
+        """
+        # Confirm UUID is valid
+        if not uuid_is_valid(uuid):
+            return {"message": "{uuid} is not a valid UUID".format(uuid=uuid)}, 400
+
+        # Check for JSON content
+        update_json = request.get_json(silent=True)
+        if update_json is None:
+            return {"message": "Could not parse JSON"}, 500
+
+        # Confirm user exists
+        existing_user = db.session.query(UserModel).filter_by(uuid=uuid).first()
+        if existing_user is None:
+            return {"message": "No user with uuid {uuid} found.".format(uuid=uuid)}, 404
+
+        # Update first name if it exists
+        if "first_name" in update_json:
+            existing_user.first_name = update_json["first_name"]
+
+        # Update last name if it exists
+        if "last_name" in update_json:
+            existing_user.last_name = update_json["last_name"]
+
+        # Update email if it exists
+        if "email" in update_json:
+            email_to_check = update_json["email"]
+            email_exists = db.session.query(UserModel).filter_by(email=email_to_check).first()
+            if email_exists:
+                return {"message": "A user with email address {email} already exists.".format(
+                    email=email_to_check)}, 409
             else:
-                return {'message': 'Email already signed up'}, 400
+                existing_user.email = email_to_check
 
-        else:
-            return {'message': 'Missing user entry'}, 400
+        # Update password if it exists
+        if "password" in update_json:
+            password_hash = ph.hash(update_json["password"])
+            existing_user.password = password_hash
 
-    # Read
-    def get(self) -> str:
-        """Returns a json object of the user specified by the uuid parameter.
+        # Commit changes to database
+        db.session.commit()
 
-        Returns:
-                str: User Json
-        """
-        if 'uuid' in request.args:
-            print("Checking for uuid: ", request.args['uuid'])
+        return {"message": "Update successful."}, 200
 
-            search_uuid = request.args['uuid']
+    def delete(self, uuid: str) -> tuple:
+        """Delete a user from the database.
 
-            query_user = db.session.query(
-                User).filter_by(uuid=search_uuid).first()
-            
-            if query_user == None:
-                return { 'message': 'invalid user' }, 400
+        Delete a user with provided UUID and returns user info.
 
-            user = UserSchema(exclude=['password_hash', 'id'])
-            return user.dump(query_user)
-        else:
-            return {'message': 'Missing uuid'}, 400
-
-    # Update
-    def put(self) -> str:
-        """Updates a user object given updated information
+        Args:
+            uuid (str): UUID of user to delete.
 
         Returns:
-                str: HTTP-200 if successful, HTTP-400 on error
+            tuple: (User Info | Error Message, HTTP Return Code)
         """
-        # Check for parameters
-        if ('token'in request.json) and ('uuid' in request.json):
-            search_uuid = UUID(request.json['uuid'])
-            # Verify a valid token
-            if not ta.verify_token(
-                request.json['token'],
-                uuid=search_uuid
-            ):
-                return {'message': 'Not logged in!'}
+        # Confirm UUID is valid
+        if not uuid_is_valid(uuid):
+            return {"message": "{uuid} is not a valid UUID".format(uuid=uuid)}, 400
 
-            # Lookup the user
-            query_user = db.session.query(
-                User).filter_by(uuid=search_uuid).first()
+        # Confirm user exists
+        existing_user = db.session.query(UserModel).filter_by(uuid=uuid).first()
+        if existing_user is None:
+            return {"message": "No user with uuid {uuid} found.".format(uuid=uuid)}, 404
 
-            # Make sure the user exists
-            if query_user:
-                # Update user information depending on what's provided
-                if 'first_name' in request.json:
-                    query_user.first_name = request.json['first_name']
-                if 'last_name' in request.json:
-                    query_user.last_name = request.json['last_name']
-                if 'email' in request.json:
-                    # Make sure the email is not already registered
-                    query_check_user = db.session.query(
-                        User).filter_by(email=request.json['email']).first()
-                    if query_check_user is not None:
-                        return {'message': 'email already registered'}, 400
-                    query_user.email = request.json['email']
-                db.session.commit()
-            else:
-                return {'message': 'uuid not valid'}, 400
-        else:
-            return {'message': 'missing parameter'}, 400
-        return {'message': 'User updated'}, 200
+        # Confirm user exists
+        existing_user = db.session.query(UserModel).filter_by(uuid=uuid).first()
+        if existing_user is None:
+            return {"message": "User with uuid {uuid} not found.".format(uuid=uuid)}, 404
 
-    # Delete
-    def delete(self) -> str:
-        """Updates a user object given updated information
+        # Delete user
+        db.session.delete(existing_user)
+        db.session.commit()
 
-        Returns:
-            str: HTTP-200 if successful, HTTP-400 on error
-        """
-        if 'uuid' in request.args:
-            search_uuid = request.args['uuid']
-            query_user = db.session.query(
-                User).filter_by(uuid=search_uuid).first()
-            if query_user:
-                db.session.delete(query_user)
-                db.session.commit()
-            else:
-                return {'message': 'User does not exist!'}, 400
-        else:
-            return {'message': 'No uuid specified!'}, 400
-        return {'message': 'User deleted'}, 200
+        # Return Deleted User w/o ID or Password info
+        user_schema = UserSchema(exclude=["id", "password_hash"])
+        return user_schema.dump(existing_user), 200
