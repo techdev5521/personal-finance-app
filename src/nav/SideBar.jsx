@@ -1,12 +1,21 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
+import HomeIcon from '@material-ui/icons/HomeOutlined';
 import Drawer from '@material-ui/core/Drawer';
-import { Toolbar } from '@material-ui/core';
+import { Toolbar, List, ListItem, ListItemIcon, ListItemText, useTheme } from '@material-ui/core';
 
 function SideBar(props) {
+    const theme = useTheme();
+
+    const transitionWidth = theme.transitions.create(['width'], {
+        duration: theme.transitions.duration.short,
+        easing: theme.transitions.easing.easeInOut,
+    });
     const sidebarStyle = {
         width: props.drawerWidth,
-    }
+        transition: transitionWidth,
+        backgroundColor: theme.palette.grey[300]
+    };
 
     return (
         <Box>
@@ -20,7 +29,14 @@ function SideBar(props) {
                 style={sidebarStyle}
             >
                 <Toolbar />
-                <Box>Test</Box>
+                <Box>
+                    <List>
+                        <ListItem button>
+                            <ListItemIcon><HomeIcon /></ListItemIcon>
+                            <ListItemText primary='Test' />
+                        </ListItem>
+                    </List>
+                </Box>
             </Drawer>
         </Box>
     );

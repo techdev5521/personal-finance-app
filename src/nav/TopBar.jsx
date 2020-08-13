@@ -2,8 +2,8 @@ import React from 'react';
 import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
-import { useTheme } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
+import { useTheme, IconButton } from '@material-ui/core';
 
 function TopBar(props) {
     const theme = useTheme()
@@ -11,7 +11,9 @@ function TopBar(props) {
         <Box>
             <AppBar style={{zIndex: theme.zIndex.drawer + 1}}>
                 <Toolbar>
-                    <Button onClick={props.onDrawerToggle}>Test</Button>
+                    <IconButton onClick={props.onDrawerToggle} color='inherit'>
+                        <MenuIcon color='inherit' fontSize='inherit' />
+                    </IconButton>
                 </Toolbar>
             </AppBar>
             <Toolbar />
