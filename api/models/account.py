@@ -35,6 +35,7 @@ class Account(db.Model):
 
 class AccountSchema(ma.SQLAlchemyAutoSchema):
     """Account Schema for Marshmallow"""
+    
     class Meta:
         """Schema Options"""
         model = Account

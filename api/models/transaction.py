@@ -1,3 +1,4 @@
+"""Transaction Model and Schema"""
 import enum
 import uuid as uuid_lib
 from .models import db, ma
@@ -6,17 +7,17 @@ from .account import Account
 from .payee import Payee
 from .category import Category
 
+
 class TransactionType(enum.Enum):
+    """Transaction Type"""
     DEPOSIT = 1
     WITHDRAWAL = 2
     TRANSFER = 3
-    
-class Transaction(db.Model):
-    """Transaction Model for SQLAlchemy
 
-    Args:
-        db (Model): Returns an SQLAlchemy Transaction object
-    """
+
+class Transaction(db.Model):
+    """Transaction Model for SQLAlchemy"""
+
     __tablename__ = 'transaction'
     id = db.Column(db.Integer, primary_key=True)
     fk_withdrawal_account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable=True)
@@ -30,17 +31,24 @@ class Transaction(db.Model):
     check_number = db.Column(db.Integer, nullable=True)
     note = db.Column(db.String(255), nullable=True)
 
-    withdrawal_account = db.relationship('Account', backref=db.backref('withdrawal_transactions'), foreign_keys=[fk_withdrawal_account_id])
-    deposit_account = db.relationship('Account', backref=db.backref('deposit_transactions'), foreign_keys=[fk_deposit_account_id])
+    withdrawal_account = db.relationship(
+        'Account',
+        backref=db.backref('withdrawal_transactions'),
+        foreign_keys=[fk_withdrawal_account_id]
+    )
+    deposit_account = db.relationship(
+        'Account',
+        backref=db.backref('deposit_transactions'),
+        foreign_keys=[fk_deposit_account_id]
+    )
     payee = db.relationship('Payee', backref=db.backref('transactions'))
     category = db.relationship('Category', backref=db.backref('transactions'))
 
-class TransactionSchema(ma.SQLAlchemyAutoSchema):
-    """Transaction Schema for Marshmallow
 
-    Args:
-        ma (SQLAlchemyAutoSchema): Returns a Marshmallow Transaction Schema object for serialization/deserialization
-    """
+class TransactionSchema(ma.SQLAlchemyAutoSchema):
+    """Transaction Schema for Marshmallow"""
+
     class Meta:
+        """Schema Options"""
         model = Transaction
         include_fk = True

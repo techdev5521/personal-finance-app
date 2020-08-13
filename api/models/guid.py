@@ -1,6 +1,10 @@
+"""Platform-independent GUID type.
+Uses PostgreSQL's UUID type, otherwise uses
+CHAR(32), storing as stringified hex values.
+"""
+import uuid
 from sqlalchemy.types import TypeDecorator, CHAR
 from sqlalchemy.dialects.postgresql import UUID
-import uuid
 
 class GUID(TypeDecorator):
     """Platform-independent GUID type.

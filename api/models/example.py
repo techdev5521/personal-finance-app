@@ -1,8 +1,9 @@
+"""Example Model and Schema"""
 from .models import db, ma
 
 
 class ExampleModel(db.Model):
-    # """Example Model for SQLAlchemy"""
+    """Example Model for SQLAlchemy"""
 
     __tablename__ = 'example'
     id = db.Column(db.Integer, primary_key=True)
@@ -11,9 +12,11 @@ class ExampleModel(db.Model):
     email = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(255), nullable=False)
 
+
 class ExampleSchema(ma.SQLAlchemyAutoSchema):
     """Example Schema for Marshmallow"""
 
     class Meta:
+        """Schema Options"""
         model = ExampleModel
         include_fk = True
