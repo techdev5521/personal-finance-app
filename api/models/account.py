@@ -12,7 +12,7 @@ class AccountType(enum.Enum):
     CARD = 3
 
 
-class Account(db.Model):
+class AccountModel(db.Model):
     """Account Model for SQLAlchemy"""
 
     __tablename__ = 'account'
@@ -38,6 +38,6 @@ class AccountSchema(ma.SQLAlchemyAutoSchema):
     
     class Meta:
         """Schema Options"""
-        model = Account
+        model = AccountModel
         include_fk = True
         exclude = ('id', 'fk_user_id')

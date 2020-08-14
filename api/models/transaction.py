@@ -3,9 +3,9 @@ import enum
 import uuid as uuid_lib
 from .models import db, ma
 from .guid import GUID
-from .account import Account
-from .payee import Payee
-from .category import Category
+from .account import AccountModel
+from .payee import PayeeModel
+from .category import CategoryModel
 
 
 class TransactionType(enum.Enum):
@@ -15,7 +15,7 @@ class TransactionType(enum.Enum):
     TRANSFER = 3
 
 
-class Transaction(db.Model):
+class TransactionModel(db.Model):
     """Transaction Model for SQLAlchemy"""
 
     __tablename__ = 'transaction'
@@ -32,17 +32,17 @@ class Transaction(db.Model):
     note = db.Column(db.String(255), nullable=True)
 
     withdrawal_account = db.relationship(
-        'Account',
+        'AccountModel',
         backref=db.backref('withdrawal_transactions'),
         foreign_keys=[fk_withdrawal_account_id]
     )
     deposit_account = db.relationship(
-        'Account',
+        'AccountModel',
         backref=db.backref('deposit_transactions'),
         foreign_keys=[fk_deposit_account_id]
     )
-    payee = db.relationship('Payee', backref=db.backref('transactions'))
-    category = db.relationship('Category', backref=db.backref('transactions'))
+    payee = db.relationship('PayeeModel', backref=db.backref('transactions'))
+    category = db.relationship('CategoryModel', backref=db.backref('transactions'))
 
 
 class TransactionSchema(ma.SQLAlchemyAutoSchema):
@@ -50,7 +50,7 @@ class TransactionSchema(ma.SQLAlchemyAutoSchema):
 
     class Meta:
         """Schema Options"""
-        model = Transaction
+        model = TransactionModel
         include_fk = True
         exclude = (
             'id',

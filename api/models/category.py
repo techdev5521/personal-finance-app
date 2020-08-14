@@ -4,7 +4,7 @@ from .models import db, ma
 from .guid import GUID
 
 
-class Category(db.Model):
+class CategoryModel(db.Model):
     """Category Model for SQLAlchemy"""
 
     __tablename__ = 'category'
@@ -18,6 +18,6 @@ class CategorySchema(ma.SQLAlchemyAutoSchema):
 
     class Meta:
         """ Schema Options"""
-        model = Category
+        model = CategoryModel
         include_fk = True
-        exclude = ('id')
+        exclude = ('id',)
