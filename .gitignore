@@ -28,3 +28,6 @@ yarn-error.log*
 # Python Files
 /api/venv
 __pycache__/
+
+# SQLite Database
+personal_finance-dev.db
