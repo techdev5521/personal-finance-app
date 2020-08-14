@@ -33,7 +33,7 @@ function SideBar(props) {
                     <List>
                         <ListItem button>
                             <ListItemIcon><HomeIcon /></ListItemIcon>
-                            <ListItemText primary='Test' />
+                            <ListItemText primary='Home' />
                         </ListItem>
                     </List>
                 </Box>
