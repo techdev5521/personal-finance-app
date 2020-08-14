@@ -24,7 +24,8 @@ function SideBar(props) {
                 anchor='left'
                 open={true}
                 PaperProps={{
-                    style: sidebarStyle
+                    style: sidebarStyle,
+                    elevation: 3
                 }}
                 style={sidebarStyle}
             >
