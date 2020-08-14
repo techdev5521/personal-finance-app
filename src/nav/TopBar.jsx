@@ -10,7 +10,7 @@ function TopBar(props) {
     return (
         <Box>
             <AppBar style={{zIndex: theme.zIndex.drawer + 1}}>
-                <Toolbar>
+                <Toolbar disableGutters>
                     <Tooltip title='Menu' arrow placement='left'>
                         <IconButton onClick={props.onDrawerToggle} color='inherit' title='menu'>
                             <MenuIcon color='inherit' fontSize='inherit' />

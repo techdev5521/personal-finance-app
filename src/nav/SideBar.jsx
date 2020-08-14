@@ -14,7 +14,7 @@ function SideBar(props) {
     const sidebarStyle = {
         width: props.drawerWidth,
         transition: transitionWidth,
-        backgroundColor: theme.palette.grey[300]
+        backgroundColor: theme.palette.grey[50]
     };
 
     return (
