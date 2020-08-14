@@ -18,10 +18,8 @@ def init_app(app):
     api.add_resource(LoginRoute, '/api/login')
     api.add_resource(
         UserRoute,
-        '/api/user/create',
-        '/api/user/<string:uuid>',
-        '/api/user/update/<string:uuid>',
-        '/api/user/delete/<string:uuid>'
+        '/api/user',
+        '/api/user/<string:uuid>'
     )
     api.add_resource(
         CategoryRoute,
